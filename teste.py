@@ -27,13 +27,13 @@ def enviar_email(aluno, email_destino):
     db.commit()
     print(f"Dados do aluno {aluno['nome']} inseridos no banco de dados com sucesso!")
     
-    email_from = 'canaldojuan59@gmail.com'
+    email_from = 'EMAIL ORIGEM'
 
     server = smtplib.SMTP('smtp.gmail.com', 587)
     server.ehlo()
     server.starttls()
     server.ehlo()
-    server.login(email_from, 'ymqfkwyyyhtnaqyl')
+    server.login(email_from, 'SENHA DO EMAIL')
 
     subject = f"Novo cadastro de aluno: {aluno['nome']}"
     body = f"Nome: {aluno['nome']}\nEmail: {aluno['email']}\nTelefone: {aluno['telefone']}\nData de Nascimento: {aluno['data_nascimento']}\nQual Ano: {aluno['qualAno']}"
