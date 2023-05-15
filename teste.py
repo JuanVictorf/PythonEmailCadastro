@@ -1,5 +1,6 @@
 import io
 import smtplib
+import mysql.connector
 from email.mime.text import MIMEText
 from email.mime.application import MIMEApplication
 from email.mime.multipart import MIMEMultipart
@@ -7,14 +8,32 @@ from reportlab.pdfgen import canvas
 
 # Função para enviar o e-mail
 def enviar_email(aluno, email_destino):
+
+    # Conexão com o banco de dados MySQL
+    db = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="",
+        database="aluno_python"
+    )
     
-    email_from = 'ENDEREÇO DO E-MAIL QUE IRÁ ENVIAR O E-MAIL '
+    cursor = db.cursor()
+    
+    # Inserção dos dados do aluno no banco de dados
+    sql = "INSERT INTO alunos (nome, email, telefone, data_nascimento, qual_ano) VALUES (%s, %s, %s, %s, %s)"
+    val = (aluno['nome'], aluno['email'], aluno['telefone'], aluno['data_nascimento'], aluno['qualAno'])
+    cursor.execute(sql, val)
+    
+    db.commit()
+    print(f"Dados do aluno {aluno['nome']} inseridos no banco de dados com sucesso!")
+    
+    email_from = 'canaldojuan59@gmail.com'
 
     server = smtplib.SMTP('smtp.gmail.com', 587)
     server.ehlo()
     server.starttls()
     server.ehlo()
-    server.login(email_from, 'SENHA DO E-MAIL OU CHAVE DE SEGURANÇA')
+    server.login(email_from, 'ymqfkwyyyhtnaqyl')
 
     subject = f"Novo cadastro de aluno: {aluno['nome']}"
     body = f"Nome: {aluno['nome']}\nEmail: {aluno['email']}\nTelefone: {aluno['telefone']}\nData de Nascimento: {aluno['data_nascimento']}\nQual Ano: {aluno['qualAno']}"
